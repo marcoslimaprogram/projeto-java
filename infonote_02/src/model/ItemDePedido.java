@@ -4,6 +4,25 @@ public class ItemDePedido {
 
 	public int qtde;
 	public double subtotal;
+	
+public void mostrar(){
+		
+		//Mostrar usuário
+		System.out.println("qtde" + this.qtde);
+		System.out.println("subtotal" + this.subtotal);
+	;
+		
+		}
+
+	public ItemDePedido(int qtde, double subtotal) {
+		super();
+		this.qtde = qtde;
+		this.subtotal = subtotal;
+	}
+	
+	public ItemDePedido(){
+		super();
+	}
 
 	public int getQtde() {
 		return qtde;

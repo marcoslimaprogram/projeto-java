@@ -19,7 +19,36 @@ public class Endereco {
 	public String cidade;
 	public String estado;
 	public String cep;
+	
+public void mostrar(){
+		
+		//Mostrar usuário
+		System.out.println("logradouro" + this.logradouro);
+		System.out.println("numero" + this.numero);
+		System.out.println("complemento" + this.complemento);
+		System.out.println("bairro" + this.bairro);
+		System.out.println("cidade" + this.cidade);
+		System.out.println("estado" + this.estado);
+		System.out.println("cep" + this.cep);
+		
+		}
 
+	public Endereco(String logradouro, String numero, String complemento, String bairro, String cidade, String estado,
+			String cep) {
+		super();
+		this.logradouro = logradouro;
+		this.numero = numero;
+		this.complemento = complemento;
+		this.bairro = bairro;
+		this.cidade = cidade;
+		this.estado = estado;
+		this.cep = cep;
+	}
+
+	public Endereco(){
+		super();
+	}
+	
 	public String getLogradouro() {
 		return logradouro;
 	}

@@ -1,13 +1,43 @@
 package model;
 
 public class Pedido {
-
+	
+	
 	public int numero;
 	public String dataEmissao;
 	public String formaDePagamento;
 	public double valorTotal;
 	public String situacao;
+	
 
+public void mostrar(){
+	
+	//Mostrar usuário
+	System.out.println("\n\nPedido:\n");
+	System.out.println("numero: " + this.numero);
+	System.out.println("dataEmissao: " + this.dataEmissao);
+	System.out.println("formaDePagamento: " + this.formaDePagamento);
+	System.out.println("valorTotal: " + this.valorTotal);
+	System.out.println("E-situacao: " + this.situacao);
+	
+	
+	}
+
+
+	public Pedido(int numero, String dataEmissao, String formaDePagamento, double valorTotal, String situacao) {
+		super();
+		this.numero = numero;
+		this.dataEmissao = dataEmissao;
+		this.formaDePagamento = formaDePagamento;
+		this.valorTotal = valorTotal;
+		this.situacao = situacao;
+	}
+	
+	public Pedido(){
+		super();
+		
+	}
+	
 	public int getNumero() {
 		return numero;
 	}
