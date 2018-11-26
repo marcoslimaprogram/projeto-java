@@ -4,23 +4,23 @@ public class ItemDePedido {
 
 	public int qtde;
 	public double subtotal;
-	
-public void mostrar(){
-		
-		//Mostrar usuário
+
+	public void mostrar() {
+
+		// Mostrar usuário
+		System.out.println("\n\nItemDePedido: ");
 		System.out.println("qtde" + this.qtde);
-		System.out.println("subtotal" + this.subtotal);
-	;
-		
-		}
+		System.out.println("subtotal" + this.subtotal + "\n" );
+
+	}
 
 	public ItemDePedido(int qtde, double subtotal) {
 		super();
 		this.qtde = qtde;
 		this.subtotal = subtotal;
 	}
-	
-	public ItemDePedido(){
+
+	public ItemDePedido() {
 		super();
 	}
 

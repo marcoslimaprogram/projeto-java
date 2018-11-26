@@ -9,19 +9,19 @@ public class Notebook {
 	public double precoUnitario;
 	public String figura;
 	public String dataCadastro;
-	
-public void mostrar(){
-		
-		//Mostrar usuário
-		System.out.println("numeroNote" + this.numeroNote );
+
+	public void mostrar() {
+
+		// Mostrar usuário
+		System.out.println("numeroNote" + this.numeroNote);
 		System.out.println("modelo" + this.modelo);
 		System.out.println("descricao" + this.descricao);
 		System.out.println("estoque" + this.estoque);
 		System.out.println("precoUnitario" + this.precoUnitario);
 		System.out.println("figura" + this.figura);
-		System.out.println("dataCadastro" + this.dataCadastro);
-		
-		}
+		System.out.println("dataCadastro" + this.dataCadastro + "\n");
+
+	}
 
 	public Notebook(int numeroNote, String modelo, String descricao, int estoque, double precoUnitario, String figura,
 			String dataCadastro) {
@@ -35,10 +35,10 @@ public void mostrar(){
 		this.dataCadastro = dataCadastro;
 	}
 
-	public Notebook(){
+	public Notebook() {
 		super();
 	}
-	
+
 	public int getNumeroNote() {
 		return numeroNote;
 	}

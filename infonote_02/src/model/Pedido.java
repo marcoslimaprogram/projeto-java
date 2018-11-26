@@ -1,28 +1,27 @@
 package model;
 
 public class Pedido {
-	
-	
+
 	public int numero;
 	public String dataEmissao;
 	public String formaDePagamento;
 	public double valorTotal;
 	public String situacao;
+	public int cont= 1;
 	
+	public void mostrar() {
+		
 
-public void mostrar(){
-	
-	//Mostrar usuário
-	System.out.println("\n\nPedido:\n");
-	System.out.println("numero: " + this.numero);
-	System.out.println("dataEmissao: " + this.dataEmissao);
-	System.out.println("formaDePagamento: " + this.formaDePagamento);
-	System.out.println("valorTotal: " + this.valorTotal);
-	System.out.println("E-situacao: " + this.situacao);
-	
-	
+		// Mostrar usuário
+		System.out.println("\nPedido: " + cont + "\n");
+		System.out.println("numero: " + this.numero);
+		System.out.println("dataEmissao: " + this.dataEmissao);
+		System.out.println("formaDePagamento: " + this.formaDePagamento);
+		System.out.println("valorTotal: " + this.valorTotal);
+		System.out.println("E-situacao: " + this.situacao + "\n" );
+		cont ++;
+		
 	}
-
 
 	public Pedido(int numero, String dataEmissao, String formaDePagamento, double valorTotal, String situacao) {
 		super();
@@ -32,12 +31,12 @@ public void mostrar(){
 		this.valorTotal = valorTotal;
 		this.situacao = situacao;
 	}
-	
-	public Pedido(){
+
+	public Pedido() {
 		super();
-		
+
 	}
-	
+
 	public int getNumero() {
 		return numero;
 	}
