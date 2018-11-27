@@ -7,19 +7,19 @@ public class Pedido {
 	public String formaDePagamento;
 	public double valorTotal;
 	public String situacao;
-	public int cont= 1;
+	//public int cont= 0;
 	
 	public void mostrar() {
 		
 
-		// Mostrar usuário
-		System.out.println("\nPedido: " + cont + "\n");
+		// Mostrar usuário - + cont + "\n"
+		System.out.println("\nPedido: ");
 		System.out.println("numero: " + this.numero);
 		System.out.println("dataEmissao: " + this.dataEmissao);
 		System.out.println("formaDePagamento: " + this.formaDePagamento);
 		System.out.println("valorTotal: " + this.valorTotal);
 		System.out.println("E-situacao: " + this.situacao + "\n" );
-		cont ++;
+		//cont ++;
 		
 	}
 
