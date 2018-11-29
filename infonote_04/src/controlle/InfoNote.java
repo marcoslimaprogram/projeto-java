@@ -11,6 +11,7 @@ public class InfoNote {
 		info.mostrarMenu();
 		opcao = Teclado.LerInt("Digite sua opção: ");
 		
+		do {
 		switch (opcao) {
 		case 1:
 			info.efetuarLogin();
@@ -45,7 +46,7 @@ public class InfoNote {
 			System.out.println("Opção inválida!");
 		}
 		Teclado.LerTexto("Pressione uma tecla para continuar...");
-		do {
+		
 		} while (opcao != 8);
 	}
 
