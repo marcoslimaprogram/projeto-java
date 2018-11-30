@@ -3,6 +3,7 @@ package model;
 
 public class Pedido {
 
+	@SuppressWarnings("unused")
 	private Endereco enderecoEntrega;
 	private ItemDePedido itens[] = new ItemDePedido[10];
 
@@ -116,7 +117,6 @@ public class Pedido {
 		return false;
 
 	}
-	
 	
 	
 }
