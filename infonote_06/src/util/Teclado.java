@@ -13,7 +13,6 @@ public class Teclado {
 	public static String LerTexto(String texto) { 
 		try {
 			System.out.println(texto);
-			
 			return teclado.readLine();
 			
 		} catch (IOException e) {
@@ -36,3 +35,5 @@ public class Teclado {
 	}
 	
 }
+
+
