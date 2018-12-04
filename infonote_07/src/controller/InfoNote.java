@@ -133,7 +133,7 @@ public class InfoNote {
 
 		Cliente cli = new Cliente(login, senha, tipo, codigoCliente, nome, email, telefone, endereco);
 
-		user = new Usuario("Marcos Lima", "Senha 12345", 1);
+	 //	user = new Usuario("Marcos Lima", "Senha 12345", 1);
 		
 		System.out.println("=================================================");
 		System.out.println(" Usuário Cadastrado Com Sucesso. ");
