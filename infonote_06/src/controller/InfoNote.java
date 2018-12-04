@@ -15,9 +15,9 @@ public class InfoNote {
 
 		InfoNote info = new InfoNote();
 		int opcao = 8;
-		info.mostrarMenu();
-		opcao = Teclado.LerInt("Digite sua opção: ");
 		do {
+			info.mostrarMenu();
+			opcao = Teclado.LerInt("Digite sua opção: ");
 			switch (opcao) {
 
 			case 1:
@@ -52,9 +52,10 @@ public class InfoNote {
 			default:
 				System.out.println("Opção inválida!");
 			}
-			Teclado.LerTexto("Pressione uma tecla para continuar...");
+			
 
 		} while (opcao != 8);
+		Teclado.LerTexto("Pressione uma tecla para continuar...");
 	}
 
 	public InfoNote() {
@@ -117,7 +118,7 @@ public class InfoNote {
 		String email = Teclado.LerTexto("E-mail: ");
 		String telefone = Teclado.LerTexto("Telefone: ");
 		
-		user = new Usuario("Marcos LIma","Senha 12345", 1);
+		user = new Usuario("Marcos Lima","Senha 12345", 1);
 		System.out.println("=================================================");
 		System.out.println(" Usuário Cadastrado Com Sucesso. ");
 		System.out.println("=================================================");
