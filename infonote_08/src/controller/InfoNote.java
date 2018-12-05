@@ -6,12 +6,14 @@ import util.*;
 public class InfoNote {
 	Usuario user;
 	boolean logado = false;
+	
 	int opcao = 8;
-
 	Notebook notebooks[] = new Notebook[10];
 	Pedido pedido;
+	private static Cliente clienteGlobal = null;
+	private static Funcionario funcionarioGlobal = null;
 
-	public static void main(String[] args) {
+		public static void main(String[] args) {
 
 		InfoNote info = new InfoNote();
 		int opcao = 8;
@@ -97,13 +99,25 @@ public class InfoNote {
 		String login, senha;
 		login = Teclado.LerTexto("Digite o login: ");
 		senha = Teclado.LerTexto("Digite a senha: ");
-		if (login.equals("Marcos Lima") && senha.equals("12345")) {
-			System.out.println("Login efetuado com sucesso.");
-			logado = true;
-		} else {
-			System.out.println("Login ou Senha inválido.");
-			efetuarLogin();
+		if (clienteGlobal != null) {
+			logado = clienteGlobal.validarLogin(login, senha);
+			if (logado) {
+				System.out.println("Login efetuado com sucesso!");
+			} else {
+				System.out.println("Usuário ou senha inválido.");
+			}
+			
 		}
+		else
+		{
+			logado = funcionarioGlobal.validarLogin(login, senha);
+			if (logado){
+				System.out.println("Login efetuado com sucesso!");
+			} else {
+				System.out.println("Usuário ou senha inválido.");
+			}
+						
+					}
 	}
 
 	public void cadastrarUsuario() {
@@ -130,14 +144,14 @@ public class InfoNote {
 
 		Endereco endereco = new Endereco(logradouro, numero, complemento, bairro, cidade, estado, cep);
 
-		Cliente cli = new Cliente(login, senha, tipo, codigoCliente, nome, email, telefone, endereco);
-
-	 //	user = new Usuario("Marcos Lima", "Senha 12345", 1);
+		Cliente cliente = new Cliente(login, senha, tipo, codigoCliente, nome, email, telefone, endereco);
+		clienteGlobal = cliente;
 		
+		// user = new Usuario("Marcos Lima", "Senha 12345", 1);
 		System.out.println("=================================================");
 		System.out.println(" Usuário Cadastrado Com Sucesso. ");
 		System.out.println("=================================================");
-		System.out.println(cli);
+		System.out.println(cliente);
 		System.out.println(endereco);
 		// System.out.println(Usuario);
 	}

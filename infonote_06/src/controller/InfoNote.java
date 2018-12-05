@@ -111,7 +111,6 @@ public class InfoNote {
 		System.out.println(" InfoNote - Cadastro de Usuários. ");
 		System.out.println("=================================================");
 
-		int matricula = Teclado.LerInt(" Matrícula: ");
 		String login = Teclado.LerTexto(" Login: ");
 		String senha = Teclado.LerTexto(" Senha: ");
 		int tipo = 1;
