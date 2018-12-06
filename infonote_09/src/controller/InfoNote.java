@@ -83,7 +83,13 @@ public class InfoNote {
 	public void mostrarMenu() {
 		System.out.println("=================================================");
 		System.out.println(" InfoNote - Se não é Info não vendemos. ");
-		System.out.println("=================================================");
+		
+		if (logado == true){
+			System.out.println("Seja bem vindo, " + clienteGlobal.getNomeInvertido());
+			}
+		
+			System.out.println("==================================================");
+
 		System.out.println("1 - Login");
 		System.out.println("2 - Cadastrar Cliente");
 		System.out.println("3 - Buscar Notebook");
@@ -92,6 +98,7 @@ public class InfoNote {
 		System.out.println("6 - Ver Carrinho");
 		System.out.println("7 - Efetuar Compra");
 		System.out.println("8 - Sair");
+		
 
 	}
 
@@ -121,10 +128,12 @@ public class InfoNote {
 	}
 
 	public void cadastrarUsuario() {
+		System.out.println("==================================================");
 		System.out.println("=================================================");
 		System.out.println(" InfoNote - Cadastro de Usuários. ");
 		System.out.println("=================================================");
 
+		
 		String login = Teclado.LerTexto(" Login: ");
 		String senha = Teclado.LerTexto(" Senha: ");
 		int tipo = 1;
@@ -140,8 +149,13 @@ public class InfoNote {
 		String bairro = Teclado.LerTexto("bairro");
 		String cidade = Teclado.LerTexto("cidade");
 		String estado = Teclado.LerTexto("estado");
-		String cep = Teclado.LerTexto("cep");
-
+		
+		String cep = Teclado.LerTexto("CEP: ");
+		if (senha.equals("") || senha == null){
+		senha = GerarSenha.gerarSenha();
+		System.out.println("Senha gerada: " + senha);
+		}
+		
 		Endereco endereco = new Endereco(logradouro, numero, complemento, bairro, cidade, estado, cep);
 
 		Cliente cliente = new Cliente(login, senha, tipo, codigoCliente, nome, email, telefone, endereco);
