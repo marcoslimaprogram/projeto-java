@@ -1,5 +1,9 @@
 package controller;
 
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import model.*;
 import util.*;
 
@@ -7,38 +11,58 @@ public class InfoNote {
 	Usuario user;
 	boolean logado = false;
 	
+	Configurador config;
+	Ajuda ajuda;
+
 	int opcao = 8;
 	Notebook notebooks[] = new Notebook[10];
 	Pedido pedido;
 
-	public static void main(String[] args) {
+	private static Cliente clienteGlobal = null;
+	private static Funcionario funcionarioGlobal = null;
+	private static final int LOGIN = 1;
+	private static final int CADASTRAR_USUARIO = 2;
+	private static final int BUSCAR_NOTEBOOK = 3;
+	private static final int INSERIR_NOTEBOOK = 4;
+	private static final int REMOVER_NOTEBOOK = 5;
+	private static final int VER_CARRINHO = 6;
+	private static final int EFETUAR_COMPRA = 7;
+	private static final int AJUDA = 8;
+	private static final int SAIR = 9;
 
+	public static void main(String[] args) throws Exception {
 		InfoNote info = new InfoNote();
-		int opcao = 8;
+		int opcao = SAIR;
 		do {
 			info.mostrarMenu();
 			opcao = Teclado.LerInt("Digite sua opção: ");
+			
 			switch (opcao) {
-
-			case 1:
+			case LOGIN:
 				info.efetuarLogin();
 				break;
-			case 2:
+				
+			case CADASTRAR_USUARIO:
 				info.cadastrarUsuario();
 				break;
-			case 3:
+				
+			case BUSCAR_NOTEBOOK:
 				info.buscarNotebook();
 				break;
-			case 4:
+				
+			case INSERIR_NOTEBOOK:
 				info.manterCarrinho();
 				break;
-			case 5:
+				
+			case REMOVER_NOTEBOOK:
 				info.manterCarrinho();
 				break;
-			case 6:
+				
+			case VER_CARRINHO:
 				info.manterCarrinho();
 				break;
-			case 7:
+				
+			case EFETUAR_COMPRA:
 				if (!info.logado) {
 					System.out.println("Efetue login para efetuar compra.");
 					break;
@@ -46,30 +70,29 @@ public class InfoNote {
 					info.efetuarCompra();
 					break;
 				}
-			case 8:
-				System.out.println("Saída do Sistema.");
+				
+			case AJUDA:
+				info.ajuda();
+				break;
+				
+			case SAIR:
+				System.out.println("Saída do Sistema");
 				break;
 			default:
 				System.out.println("Opção inválida!");
 			}
-
-		} while (opcao != 8);
-		Teclado.LerTexto("Pressione uma tecla para continuar...");
+			Teclado.LerTexto("Pressione uma tecla para continuar...");
+		} while (opcao != SAIR);
 	}
 
-	public InfoNote() {
-		notebooks[0] = new Notebook(1, "Negativo N22BR", "CPU Intel Core 2 Duo, Memória 2 GB, HD 250 GB", 6, 1200.00,
-				"img\\n22br.jpg", "19/05/2011");
-		notebooks[1] = new Notebook(2, "Bell B55BR", "CPU Intel I3, Memória 4 GB, HD 500 GB", 3, 1800.00,
-				"img\\b55br.jpg", "20/05/2011");
-		notebooks[2] = new Notebook(3, "Pompaq P41BR", "CPU Intel I3, Memória 3 GB, HD 320 GB", 1, 1600.00,
-				"img\\p41br.jpg", "21/05/2011");
-		notebooks[3] = new Notebook(4, "CCF CR71CH", "CPU Intel Dual Core, Memória 2 GB, HD 160 GB", 5, 1100.00,
-				"img\\cr71ch.jpg", "10/06/2011");
-		notebooks[4] = new Notebook(5, "BradescoTech BD22BR", "CPU AMD Phenon II, Memória 4 GB, HD 500 GB", 2, 1900.00,
-				"img\\bd22br.jpg", "10/06/2011");
+	public InfoNote() throws Exception {
+		// Cria objeto de configurações
+		config = new Configurador();
+		Locale.setDefault(new Locale(config.getIdioma(), config.getRegiao()));
+		// Cria o objeto Ajuda
+		ajuda = new Ajuda(config.getArquivoAjuda());
 	}
-
+		
 	public void buscarNotebook1() {
 		for (int i = 0; i < notebooks.length; i++) {
 			if (notebooks[i] != null) {
@@ -80,16 +103,24 @@ public class InfoNote {
 
 	public void mostrarMenu() {
 		System.out.println("=================================================");
-		System.out.println(" InfoNote - Se não é Info não vendemos. ");
-		System.out.println("=================================================");
+		System.out.println(" InfoNote - Se não é Info não vendemos. "
+				+ DateFormat.getDateInstance(DateFormat.SHORT).format(new Date()) + " "
+				+ DateFormat.getTimeInstance().format(new Date()));
+		if (logado == true) {
+			System.out.println("Seja bem vindo, " + clienteGlobal.getNomeInvertido());
+		}
+
+		System.out.println("==================================================");
+
 		System.out.println("1 - Login");
 		System.out.println("2 - Cadastrar Cliente");
-		System.out.println("3 - Buscar Notebook");
+		System.out.println("3 - Buscar notebook");
 		System.out.println("4 - Inserir Notebook no carrinho");
 		System.out.println("5 - Remover Notebook no carrinho");
-		System.out.println("6 - Ver Carrinho");
+		System.out.println("6 - ver Carrinho");
 		System.out.println("7 - Efetuar Compra");
-		System.out.println("8 - Sair");
+		System.out.println("8 - Ajuda");
+		System.out.println("9 - Sair");
 
 	}
 
@@ -97,22 +128,38 @@ public class InfoNote {
 		String login, senha;
 		login = Teclado.LerTexto("Digite o login: ");
 		senha = Teclado.LerTexto("Digite a senha: ");
-		if (login.equals("Marcos Lima") && senha.equals("12345")) {
-			System.out.println("Login efetuado com sucesso.");
-			logado = true;
+		if (clienteGlobal != null) {
+			logado = clienteGlobal.validarLogin(login, senha);
+			if (logado) {
+				System.out.println("Login efetuado com sucesso!");
+			} else {
+				System.out.println("Usuário ou senha inválido.");
+			}
+
 		} else {
-			System.out.println("Login ou Senha inválido.");
-			efetuarLogin();
+			logado = funcionarioGlobal.validarLogin(login, senha);
+			if (logado) {
+				System.out.println("Login efetuado com sucesso!");
+			} else {
+				System.out.println("Usuário ou senha inválido.");
+			}
+
 		}
 	}
 
 	public void cadastrarUsuario() {
+		System.out.println("==================================================");
 		System.out.println("=================================================");
 		System.out.println(" InfoNote - Cadastro de Usuários. ");
 		System.out.println("=================================================");
 
 		String login = Teclado.LerTexto(" Login: ");
 		String senha = Teclado.LerTexto(" Senha: ");
+		if (senha.equals("") || senha == null) {
+			senha = GerarSenha.gerarSenha();
+			System.out.println("Senha gerada: " + senha);
+		}
+
 		int tipo = 1;
 		String codigoCliente = Teclado.LerTexto("codigo cliente");
 		String nome = Teclado.LerTexto("Nome: ");
@@ -126,18 +173,19 @@ public class InfoNote {
 		String bairro = Teclado.LerTexto("bairro");
 		String cidade = Teclado.LerTexto("cidade");
 		String estado = Teclado.LerTexto("estado");
-		String cep = Teclado.LerTexto("cep");
+
+		String cep = Teclado.LerTexto("CEP: ");
 
 		Endereco endereco = new Endereco(logradouro, numero, complemento, bairro, cidade, estado, cep);
 
-		Cliente cli = new Cliente(login, senha, tipo, codigoCliente, nome, email, telefone, endereco);
+		Cliente cliente = new Cliente(login, senha, tipo, codigoCliente, nome, email, telefone, endereco);
+		clienteGlobal = cliente;
 
-	 //	user = new Usuario("Marcos Lima", "Senha 12345", 1);
-		
+		// user = new Usuario("Marcos Lima", "Senha 12345", 1);
 		System.out.println("=================================================");
 		System.out.println(" Usuário Cadastrado Com Sucesso. ");
 		System.out.println("=================================================");
-		System.out.println(cli);
+		System.out.println(cliente);
 		System.out.println(endereco);
 		// System.out.println(Usuario);
 	}
@@ -147,7 +195,9 @@ public class InfoNote {
 			if (notebooks[i] != null) {
 				System.out.println(notebooks[i].getSerialNote() + "-----" + notebooks[i].getModelo());
 			}
+
 		}
+
 	}
 
 	public void manterCarrinho() {
@@ -158,6 +208,11 @@ public class InfoNote {
 		System.out.println("efetuarCompra - Em Construção");
 
 	}
+	
+	public void ajuda(){
+		System.out.println(ajuda.getTexto());
+		
+		}
 
 	// InfoNote info = new InfoNote();
 
@@ -184,5 +239,18 @@ public class InfoNote {
 		ItemDePedido item = new ItemDePedido(1, aux.getPrecoUnitario(), aux);
 		// Insere item no pedido
 		pedido.inserirItem(item);
+	}
+	
+	public static boolean isNumeric(String str)
+	{
+		try
+		{
+			int d = Int.parseInt(str);
+		}
+		catch(NumberFormatException nfe)
+		{
+			return false;
+					}
+		return true;
 	}
 }

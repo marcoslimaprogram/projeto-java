@@ -10,6 +10,7 @@ public class InfoNote {
 	int opcao = 8;
 	Notebook notebooks[] = new Notebook[10];
 	Pedido pedido;
+
 	private static Cliente clienteGlobal = null;
 	private static Funcionario funcionarioGlobal = null;
 
@@ -83,12 +84,12 @@ public class InfoNote {
 	public void mostrarMenu() {
 		System.out.println("=================================================");
 		System.out.println(" InfoNote - Se não é Info não vendemos. ");
-		
-		if (logado == true){
+
+		if (logado == true) {
 			System.out.println("Seja bem vindo, " + clienteGlobal.getNomeInvertido());
-			}
-		
-			System.out.println("==================================================");
+		}
+
+		System.out.println("==================================================");
 
 		System.out.println("1 - Login");
 		System.out.println("2 - Cadastrar Cliente");
@@ -98,7 +99,6 @@ public class InfoNote {
 		System.out.println("6 - Ver Carrinho");
 		System.out.println("7 - Efetuar Compra");
 		System.out.println("8 - Sair");
-		
 
 	}
 
@@ -113,18 +113,16 @@ public class InfoNote {
 			} else {
 				System.out.println("Usuário ou senha inválido.");
 			}
-			
-		}
-		else
-		{
+
+		} else {
 			logado = funcionarioGlobal.validarLogin(login, senha);
-			if (logado){
+			if (logado) {
 				System.out.println("Login efetuado com sucesso!");
 			} else {
 				System.out.println("Usuário ou senha inválido.");
 			}
-						
-					}
+
+		}
 	}
 
 	public void cadastrarUsuario() {
@@ -133,9 +131,13 @@ public class InfoNote {
 		System.out.println(" InfoNote - Cadastro de Usuários. ");
 		System.out.println("=================================================");
 
-		
 		String login = Teclado.LerTexto(" Login: ");
 		String senha = Teclado.LerTexto(" Senha: ");
+		if (senha.equals("") || senha == null) {
+			senha = GerarSenha.gerarSenha();
+			System.out.println("Senha gerada: " + senha);
+		}
+
 		int tipo = 1;
 		String codigoCliente = Teclado.LerTexto("codigo cliente");
 		String nome = Teclado.LerTexto("Nome: ");
@@ -149,18 +151,14 @@ public class InfoNote {
 		String bairro = Teclado.LerTexto("bairro");
 		String cidade = Teclado.LerTexto("cidade");
 		String estado = Teclado.LerTexto("estado");
-		
+
 		String cep = Teclado.LerTexto("CEP: ");
-		if (senha.equals("") || senha == null){
-		senha = GerarSenha.gerarSenha();
-		System.out.println("Senha gerada: " + senha);
-		}
-		
+
 		Endereco endereco = new Endereco(logradouro, numero, complemento, bairro, cidade, estado, cep);
 
 		Cliente cliente = new Cliente(login, senha, tipo, codigoCliente, nome, email, telefone, endereco);
 		clienteGlobal = cliente;
-		
+
 		// user = new Usuario("Marcos Lima", "Senha 12345", 1);
 		System.out.println("=================================================");
 		System.out.println(" Usuário Cadastrado Com Sucesso. ");
@@ -175,7 +173,9 @@ public class InfoNote {
 			if (notebooks[i] != null) {
 				System.out.println(notebooks[i].getSerialNote() + "-----" + notebooks[i].getModelo());
 			}
+
 		}
+
 	}
 
 	public void manterCarrinho() {
