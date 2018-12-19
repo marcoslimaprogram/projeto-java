@@ -5,19 +5,25 @@ import java.util.Date;
 import java.util.Locale;
 
 import model.*;
+import model.DAO.ClienteDAO;
+import model.DAO.EnderecoDAO;
+import model.DAO.FuncionarioDAO;
+import model.DAO.UsuarioDAO;
 import util.*;
 
 public class InfoNote {
 	Usuario user;
 	boolean logado = false;
-	
+	Usuario usuario;
+	Cliente cliente;
+
 	Configurador config;
 	Ajuda ajuda;
 
 	int opcao = 8;
 	Notebook notebooks[] = new Notebook[10];
 	Pedido pedido;
-
+	private static final int AREA_ADMINISTRATIVA = 9;
 	private static Cliente clienteGlobal = null;
 	private static Funcionario funcionarioGlobal = null;
 	private static final int LOGIN = 1;
@@ -28,41 +34,40 @@ public class InfoNote {
 	private static final int VER_CARRINHO = 6;
 	private static final int EFETUAR_COMPRA = 7;
 	private static final int AJUDA = 8;
-	private static final int SAIR = 9;
+	private static final int SAIR = 10;
 
 	public static void main(String[] args) {
 		InfoNote info = new InfoNote();
 		int opcao = SAIR;
-		String opcaoStr;
 		do {
 			info.mostrarMenu();
 			opcao = Teclado.LerInt("Digite sua opção: ");
-			
+
 			switch (opcao) {
 			case LOGIN:
 				info.efetuarLogin();
 				break;
-				
+
 			case CADASTRAR_USUARIO:
 				info.cadastrarUsuario();
 				break;
-				
+
 			case BUSCAR_NOTEBOOK:
 				info.buscarNotebook();
 				break;
-				
+
 			case INSERIR_NOTEBOOK:
 				info.manterCarrinho();
 				break;
-				
+
 			case REMOVER_NOTEBOOK:
 				info.manterCarrinho();
 				break;
-				
+
 			case VER_CARRINHO:
 				info.manterCarrinho();
 				break;
-				
+
 			case EFETUAR_COMPRA:
 				if (!info.logado) {
 					System.out.println("Efetue login para efetuar compra.");
@@ -71,11 +76,15 @@ public class InfoNote {
 					info.efetuarCompra();
 					break;
 				}
-				
+
 			case AJUDA:
 				info.ajuda();
 				break;
-				
+
+			case AREA_ADMINISTRATIVA:
+				info.areaAdministrativa();
+				break;
+
 			case SAIR:
 				System.out.println("Saída do Sistema");
 				break;
@@ -86,6 +95,10 @@ public class InfoNote {
 		} while (opcao != SAIR);
 	}
 
+	// TODO Auto-generated method stub
+
+	}
+
 	public InfoNote() {
 		// Cria objeto de configurações
 		config = new Configurador();
@@ -93,7 +106,7 @@ public class InfoNote {
 		// Cria o objeto Ajuda
 		ajuda = new Ajuda(config.getArquivoAjuda());
 	}
-		
+
 	public void buscarNotebook1() {
 		for (int i = 0; i < notebooks.length; i++) {
 			if (notebooks[i] != null) {
@@ -122,6 +135,8 @@ public class InfoNote {
 		System.out.println("7 - Efetuar Compra");
 		System.out.println("8 - Ajuda");
 		System.out.println("9 - Sair");
+		System.out.println("9 - Área Administrativa");
+		System.out.println("10 - Sair");
 
 	}
 
@@ -129,22 +144,36 @@ public class InfoNote {
 		String login, senha;
 		login = Teclado.LerTexto("Digite o login: ");
 		senha = Teclado.LerTexto("Digite a senha: ");
-		if (clienteGlobal != null) {
-			logado = clienteGlobal.validarLogin(login, senha);
-			if (logado) {
-				System.out.println("Login efetuado com sucesso!");
-			} else {
-				System.out.println("Usuário ou senha inválido.");
-			}
-
+		cliente = ClienteDAO.buscarPorLoginSenha(login, senha);
+		if (cliente != null) {
+			logado = cliente.validarLogin(login, senha);
 		} else {
-			logado = funcionarioGlobal.validarLogin(login, senha);
 			if (logado) {
 				System.out.println("Login efetuado com sucesso!");
 			} else {
 				System.out.println("Usuário ou senha inválido.");
+				int opcao2 = 3;
+				do {
+					System.out.println("Digite:");
+					System.out.println("1 - Para efetuar Login");
+					System.out.println("2 - Para cadastrar-se");
+					System.out.println("3 - Para sair do sistema");
+					opcao2 = Teclado.LerInt("");
+					switch (opcao2) {
+					case 1:
+						efetuarLogin();
+						break;
+					case 2:
+						cadastrarUsuario();
+						break;
+					case 3:
+						System.out.println("Obrigado e volte sempre!");
+						break;
+					default:
+						System.out.println("Opção inválida");
+					}
+				} while (!logado);
 			}
-
 		}
 	}
 
@@ -156,12 +185,13 @@ public class InfoNote {
 
 		String login = Teclado.LerTexto(" Login: ");
 		String senha = Teclado.LerTexto(" Senha: ");
+		int tipo = 0;
+		// int tipo = 0; // porque todo cliente é tipo zero
 		if (senha.equals("") || senha == null) {
 			senha = GerarSenha.gerarSenha();
 			System.out.println("Senha gerada: " + senha);
 		}
 
-		int tipo = 1;
 		String codigoCliente = Teclado.LerTexto("codigo cliente");
 		String nome = Teclado.LerTexto("Nome: ");
 		String email = Teclado.LerTexto("E-mail: ");
@@ -177,10 +207,10 @@ public class InfoNote {
 
 		String cep = Teclado.LerTexto("CEP: ");
 
-		Endereco endereco = new Endereco(logradouro, numero, complemento, bairro, cidade, estado, cep);
-
-		Cliente cliente = new Cliente(login, senha, tipo, codigoCliente, nome, email, telefone, endereco);
-		clienteGlobal = cliente;
+		usuario = UsuarioDAO.inserir(login, senha, tipo);
+		cliente = ClienteDAO.inserir(login, senha, tipo, codigoCliente, nome, email, telefone);
+		Endereco endereco = EnderecoDAO.inserir(logradouro, numero, complemento, bairro, cidade, estado, cep,
+				codigoCliente);
 
 		// user = new Usuario("Marcos Lima", "Senha 12345", 1);
 		System.out.println("=================================================");
@@ -209,11 +239,11 @@ public class InfoNote {
 		System.out.println("efetuarCompra - Em Construção");
 
 	}
-	
-	public void ajuda(){
+
+	public void ajuda() {
 		System.out.println(ajuda.getTexto());
-		
-		}
+
+	}
 
 	// InfoNote info = new InfoNote();
 
@@ -241,18 +271,65 @@ public class InfoNote {
 		// Insere item no pedido
 		pedido.inserirItem(item);
 	}
-	
-	public static boolean isNumeric(String str)
-	{
-		try
-		{
+
+	public static boolean isNumeric(String str) {
+		try {
 			@SuppressWarnings("unused")
 			int i = Integer.parseInt(str);
-		}
-		catch(NumberFormatException nfe)
-		{
+		} catch (NumberFormatException nfe) {
 			return false;
-					}
+		}
 		return true;
+	}
+
+	public void efetuarLoginAdm() {
+		String login, senha;
+		login = Teclado.LerTexto("Digite o login: ");
+		senha = Teclado.LerTexto("Digite a senha: ");
+		Funcionario funcionario = FuncionarioDAO.buscarPorLoginSenha(login, senha);
+		if (funcionario != null) {
+			logado = funcionario.validarLogin(login, senha);
+		} else {
+			if (logado) {
+				System.out.println("Login efetuado com sucesso!");
+			} else {
+				System.out.println("Usuário ou senha inválido.");
+			}
+		}
+	}
+
+	public void areaAdministrativa() {
+		InfoNote info = new InfoNote();
+		efetuarLoginAdm();
+		System.out.println("Opções Administrativas\n");
+		System.out.println("1 - Cadastrar Notebook");
+		System.out.println("2 - Mostrar Notebooks");
+		System.out.println("3 - Editar Notebook");
+		System.out.println("4 - Excluir Notebook");
+		System.out.println("5 - Sair");
+		int opcao = 5;
+		do {
+			opcao = Teclado.lerInt("Digite sua opção: ");
+			switch (opcao) {
+			case 1:
+				info.cadastrarNotebook();
+				break;
+			case 2:
+				info.mostrarNotebooks();
+				break;
+			case 3:
+				info.editarNotebook();
+				break;
+			case 4:
+				info.excluirNotebook();
+				break;
+			case 5:
+				System.out.println("Saída do Sistema");
+				break;
+			default:
+				System.out.println("Opção inválida!");
+			}
+			Teclado.lerTexto("Pressione uma tecla para continuar...");
+		} while (opcao != 5);
 	}
 }
