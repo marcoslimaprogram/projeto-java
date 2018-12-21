@@ -8,6 +8,7 @@ import model.*;
 import model.DAO.ClienteDAO;
 import model.DAO.EnderecoDAO;
 import model.DAO.FuncionarioDAO;
+import model.DAO.NotebookDAO;
 import model.DAO.UsuarioDAO;
 import util.*;
 
@@ -97,8 +98,6 @@ public class InfoNote {
 
 	// TODO Auto-generated method stub
 
-	}
-
 	public InfoNote() {
 		// Cria objeto de configurações
 		config = new Configurador();
@@ -107,10 +106,17 @@ public class InfoNote {
 		ajuda = new Ajuda(config.getArquivoAjuda());
 	}
 
-	public void buscarNotebook1() {
+	public void mostrarNotebooks() {
+		System.out.println("buscarNotebooks - Em Contrução");
+
 		for (int i = 0; i < notebooks.length; i++) {
 			if (notebooks[i] != null) {
-				System.out.println(notebooks[i].getSerialNote() + "-----" + notebooks[i].getModelo());
+				System.out.println(notebooks[i].getSerialNote() + "-----" + notebooks[i].getModelo() + "-----"
+						+ notebooks[i].getDescricao() + "-----" + notebooks[i].getEstoque() + "-----"
+						+ notebooks[i].getPrecoUnitario() + "-----" + notebooks[i].getFigura() + "-----"
+						+ notebooks[i].getDataCadastro() + "-----"
+
+				);
 			}
 		}
 	}
@@ -168,6 +174,7 @@ public class InfoNote {
 						break;
 					case 3:
 						System.out.println("Obrigado e volte sempre!");
+						System.exit(0);
 						break;
 					default:
 						System.out.println("Opção inválida");
@@ -294,6 +301,7 @@ public class InfoNote {
 				System.out.println("Login efetuado com sucesso!");
 			} else {
 				System.out.println("Usuário ou senha inválido.");
+				System.exit(0);
 			}
 		}
 	}
@@ -309,7 +317,7 @@ public class InfoNote {
 		System.out.println("5 - Sair");
 		int opcao = 5;
 		do {
-			opcao = Teclado.lerInt("Digite sua opção: ");
+			opcao = Teclado.LerInt("Digite sua opção: ");
 			switch (opcao) {
 			case 1:
 				info.cadastrarNotebook();
@@ -319,6 +327,7 @@ public class InfoNote {
 				break;
 			case 3:
 				info.editarNotebook();
+				System.exit(0);
 				break;
 			case 4:
 				info.excluirNotebook();
@@ -329,7 +338,58 @@ public class InfoNote {
 			default:
 				System.out.println("Opção inválida!");
 			}
-			Teclado.lerTexto("Pressione uma tecla para continuar...");
+			Teclado.LerTexto("Pressione uma tecla para continuar...");
 		} while (opcao != 5);
 	}
+
+	public void cadastrarNotebook() {
+		System.out.println("==================================================");
+		System.out.println("=================================================");
+		System.out.println(" InfoNote - Cadastro de Notebook. ");
+		System.out.println("=================================================");
+
+		String serialNote = Teclado.LerTexto("serialNote:");
+		String modelo = Teclado.LerTexto("modelo:");
+		String descricao = Teclado.LerTexto("descricao:");
+		int estoque = Teclado.LerInt("estoque");
+		double precoUnitario = Teclado.lerDouble("precoUnitario");
+		String Figura = Teclado.LerTexto("Figura");
+		String dataCadastro = Teclado.LerTexto("dataCadastro: ");
+
+		Notebook notebook = NotebookDAO.inserir(serialNote, modelo, descricao, estoque, precoUnitario, Figura,
+				dataCadastro);
+
+		// user = new Usuario("Marcos Lima", "Senha 12345", 1);
+		System.out.println("=================================================");
+		System.out.println(" Notebok Cadastrado Com Sucesso. ");
+		System.out.println("=================================================");
+		System.out.println(notebook);
+
+	}
+
+	private void excluirNotebook() {
+		// TODO Auto-generated method stub
+
+		System.out.println("====================================");
+		System.out.println(" Excluir de Notebook ");
+		System.out.println("====================================");
+		String serialNote = Teclado.LerTexto("Informe o SeriaNote do Notebook a ser excluido: ");
+
+		Notebook notebook = NotebookDAO.excluir(serialNote);
+		// System.out.println(notebook);
+
+	}
+
+	private void editarNotebook() {
+		// TODO Auto-generated method stub
+		System.out.println("====================================");
+		System.out.println(" Editar Notebook ");
+		System.out.println("====================================");
+		// int id = Teclado.lerInt("Digite o número id da mensagem a ser editada:");
+		// String mensagem = Teclado.lerTexto("Mensagem: ");
+		// NotebookDAO.atualizar(mensagem, id);
+		// System.out.println("Mensagem atualizada com sucesso");
+
+	}
+
 }
